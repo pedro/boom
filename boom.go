@@ -21,8 +21,10 @@ import (
 	"net/http"
 	gourl "net/url"
 	"os"
+	"os/signal"
 	"regexp"
 	"strings"
+	"syscall"
 
 	"github.com/rakyll/boom/boomer"
 )
@@ -141,7 +143,7 @@ func main() {
 		usageAndExit("Invalid output type.")
 	}
 
-	(&boomer.Boomer{
+	boomer := boomer.Boomer{
 		Req: &boomer.ReqOpts{
 			Method:       method,
 			Url:          url,
@@ -157,7 +159,11 @@ func main() {
 		Timeout:       t,
 		AllowInsecure: *flagInsecure,
 		Output:        *flagOutput,
-		ProxyAddr:     *flagProxyAddr}).Run()
+		ProxyAddr:     *flagProxyAddr}
+
+	go handleSignals(boomer)
+
+	boomer.Run()
 }
 
 // Replaces host with an IP and returns the provided
@@ -212,4 +218,11 @@ func usageAndExit(message string) {
 	flag.Usage()
 	fmt.Fprintf(os.Stderr, "\n")
 	os.Exit(1)
+}
+
+func handleSignals(b boomer.Boomer) {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+	<-c // wait for INT/TERM
+	os.Exit(0)
 }
