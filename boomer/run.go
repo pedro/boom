@@ -80,7 +80,6 @@ func (b *Boomer) run() {
 		throttle = time.Tick(time.Duration(1e6/(b.Qps)) * time.Microsecond)
 	}
 
-	start := time.Now()
 	jobs := make(chan *http.Request, b.N)
 	// Start workers.
 	for i := 0; i < b.C; i++ {
@@ -103,5 +102,5 @@ func (b *Boomer) run() {
 	if b.bar != nil {
 		b.bar.Finish()
 	}
-	b.Report.finalize(time.Now().Sub(start))
+	b.Report.Finalize()
 }

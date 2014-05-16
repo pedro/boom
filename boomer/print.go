@@ -33,6 +33,7 @@ type report struct {
 	rps      float64
 
 	results chan *result
+	start   time.Time
 	total   time.Duration
 
 	statusCodeDist map[int]int
@@ -49,10 +50,11 @@ func newReport(size int, results chan *result, output string) *report {
 		results:        results,
 		output:         output,
 		errors:         make(map[string]int),
+		start:          time.Now(),
 	}
 }
 
-func (r *report) finalize(total time.Duration) {
+func (r *report) Finalize() {
 	for {
 		select {
 		case res := <-r.results:
@@ -67,7 +69,7 @@ func (r *report) finalize(total time.Duration) {
 				}
 			}
 		default:
-			r.total = total
+			r.total = time.Now().Sub(r.start)
 			r.rps = float64(len(r.lats)) / r.total.Seconds()
 			r.average = r.avgTotal / float64(len(r.lats))
 			r.print()

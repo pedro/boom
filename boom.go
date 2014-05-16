@@ -224,5 +224,6 @@ func handleSignals(b boomer.Boomer) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 	<-c // wait for INT/TERM
+	b.Report.Finalize()
 	os.Exit(0)
 }
