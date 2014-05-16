@@ -76,8 +76,10 @@ type Boomer struct {
 	// Optional address of HTTP proxy server as host:port
 	ProxyAddr string
 
+	// Report on this run
+	Report *report
+
 	bar     *pb.ProgressBar
-	rpt     *report
 	results chan *result
 }
 

@@ -29,7 +29,7 @@ func (b *Boomer) Run() {
 	if b.Output == "" {
 		b.bar = newPb(b.N)
 	}
-	b.rpt = newReport(b.N, b.results, b.Output)
+	b.Report = newReport(b.N, b.results, b.Output)
 	b.run()
 }
 
@@ -103,5 +103,5 @@ func (b *Boomer) run() {
 	if b.bar != nil {
 		b.bar.Finish()
 	}
-	b.rpt.finalize(time.Now().Sub(start))
+	b.Report.finalize(time.Now().Sub(start))
 }

@@ -159,8 +159,8 @@ func TestContentLengthIfExists(t *testing.T) {
 	}
 	boomer.Run()
 
-	if boomer.rpt.sizeTotal != 200 {
-		t.Errorf("Expected Total Data Received 200 bytes, found %v", boomer.rpt.sizeTotal)
+	if boomer.Report.sizeTotal != 200 {
+		t.Errorf("Expected Total Data Received 200 bytes, found %v", boomer.Report.sizeTotal)
 	}
 }
 
@@ -180,7 +180,7 @@ func TestContentLengthIfDontExists(t *testing.T) {
 	}
 	boomer.Run()
 
-	if boomer.rpt.sizeTotal != 0 {
-		t.Errorf("Expected Total Data Received 200 bytes, found %v", boomer.rpt.sizeTotal)
+	if boomer.Report.sizeTotal != 0 {
+		t.Errorf("Expected Total Data Received 200 bytes, found %v", boomer.Report.sizeTotal)
 	}
 }
